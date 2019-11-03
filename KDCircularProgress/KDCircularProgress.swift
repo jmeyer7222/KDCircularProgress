@@ -84,6 +84,12 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         }
     }
     
+    public var glowColor: UIColor = UIColor.black {
+        didSet {
+            progressLayer.glowColor = glowColor
+        }
+    }
+    
     @IBInspectable public var progressThickness: CGFloat = 0.4 {
         didSet {
             progressThickness = progressThickness.clamp(lowerBound: 0.0, upperBound: 1.0)
@@ -170,6 +176,7 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         progressLayer.gradientRotateSpeed = gradientRotateSpeed
         progressLayer.glowAmount = glowAmount
         progressLayer.glowMode = glowMode
+        progressLayer.glowColor = glowColor
         progressLayer.progressThickness = progressThickness / 2.0
         progressLayer.trackColor = trackColor
         progressLayer.trackThickness = trackThickness / 2.0
@@ -284,6 +291,7 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         }
         var glowAmount: CGFloat = 0.0
         var glowMode: KDCircularProgressGlowMode = .forward
+        var glowColor : UIColor = UIColor.black
         var progressThickness: CGFloat = 0.5
         var trackThickness: CGFloat = 0.5
         var trackColor: UIColor = .black
@@ -329,6 +337,7 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
             gradientRotateSpeed = progressLayer.gradientRotateSpeed
             glowAmount = progressLayer.glowAmount
             glowMode = progressLayer.glowMode
+            glowColor = progressLayer.glowColor
             progressThickness = progressLayer.progressThickness
             trackThickness = progressLayer.trackThickness
             trackColor = progressLayer.trackColor
@@ -385,7 +394,7 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
             
             let glowValue = GlowConstants.glowAmount(forAngle: canonicalAngle, glowAmount: glowAmount, glowMode: glowMode, size: width)
             if glowValue > 0 {
-                imageCtx?.setShadow(offset: .zero, blur: glowValue, color: UIColor.black.cgColor)
+                imageCtx?.setShadow(offset: .zero, blur: glowValue, color: glowColor.cgColor)
             }
             
             let linecap: CGLineCap = roundedCorners ? .round : .butt
