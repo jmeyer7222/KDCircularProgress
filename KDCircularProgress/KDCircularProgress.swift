@@ -359,10 +359,16 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
             let size = bounds.size
             let width = size.width
             let height = size.height
-            
+            let canonicalAngle = angle.mod(between: 0.0, and: 360.0, byIncrementing: 360.0)
             let trackLineWidth = radius * trackThickness
             let progressLineWidth = radius * progressThickness
             let arcRadius = max(radius - trackLineWidth / 2.0, radius - progressLineWidth / 2.0)
+            
+            let glowValue = GlowConstants.glowAmount(forAngle: canonicalAngle, glowAmount: glowAmount, glowMode: glowMode, size: width)
+            if glowValue > 0 {
+                ctx.setShadow(offset: .zero, blur: glowValue, color: glowColor.cgColor)
+            }
+            
             ctx.addArc(center: CGPoint(x: width / 2.0, y: height / 2.0),
                        radius: arcRadius,
                        startAngle: 0,
@@ -377,7 +383,6 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
             UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
             
             let imageCtx = UIGraphicsGetCurrentContext()
-            let canonicalAngle = angle.mod(between: 0.0, and: 360.0, byIncrementing: 360.0)
             let fromAngle = -startAngle.radians
             let toAngle: Double
             if clockwise {
@@ -392,8 +397,7 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
                              endAngle: CGFloat(toAngle),
                              clockwise: clockwise)
             
-            let glowValue = GlowConstants.glowAmount(forAngle: canonicalAngle, glowAmount: glowAmount, glowMode: glowMode, size: width)
-            if glowValue > 0 {
+            if glowValue > 0 && false {
                 imageCtx?.setShadow(offset: .zero, blur: glowValue, color: glowColor.cgColor)
             }
             
